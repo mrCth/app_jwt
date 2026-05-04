@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import '../services/auth_service.dart';
 
 class RegisterScreen extends StatefulWidget {
@@ -48,10 +49,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text(response.message),
-            backgroundColor: response.status == 'ok'
-                ? Colors.green
-                : Colors.red,
+            content: Text(
+              response.message.toUpperCase(),
+              style: GoogleFonts.roboto(fontWeight: FontWeight.bold),
+            ),
+            backgroundColor: response.status == 'ok' ? Colors.black : Colors.black87,
+            behavior: SnackBarBehavior.floating,
+            shape: const RoundedRectangleBorder(borderRadius: BorderRadius.zero),
           ),
         );
 
@@ -66,36 +70,63 @@ class _RegisterScreenState extends State<RegisterScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Create Account')),
+      appBar: AppBar(
+        title: const Text('ENROLLMENT'),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios_new),
+          onPressed: () => Navigator.pop(context),
+        ),
+      ),
       body: SafeArea(
         child: SingleChildScrollView(
-          padding: const EdgeInsets.all(24.0),
+          padding: const EdgeInsets.all(32.0),
           child: Form(
             key: _formKey,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
+                const Icon(
+                  Icons.how_to_reg,
+                  size: 60,
+                  color: Colors.black,
+                ),
+                const SizedBox(height: 24),
+                Text(
+                  'NEW IDENTITY',
+                  style: GoogleFonts.roboto(
+                    fontSize: 28,
+                    fontWeight: FontWeight.w900,
+                    letterSpacing: 2.0,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  'FILL DETAILS TO PROCEED',
+                  style: GoogleFonts.roboto(
+                    fontSize: 12,
+                    fontWeight: FontWeight.bold,
+                    letterSpacing: 1.5,
+                    color: Colors.grey[600],
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 48),
                 Row(
                   children: [
                     Expanded(
                       child: TextFormField(
                         controller: _fnameController,
-                        decoration: const InputDecoration(
-                          labelText: 'First Name',
-                          border: OutlineInputBorder(),
-                        ),
-                        validator: (v) => v!.isEmpty ? 'Required' : null,
+                        decoration: const InputDecoration(labelText: 'FIRST NAME'),
+                        validator: (v) => v!.isEmpty ? 'REQUIRED' : null,
                       ),
                     ),
                     const SizedBox(width: 16),
                     Expanded(
                       child: TextFormField(
                         controller: _lnameController,
-                        decoration: const InputDecoration(
-                          labelText: 'Last Name',
-                          border: OutlineInputBorder(),
-                        ),
-                        validator: (v) => v!.isEmpty ? 'Required' : null,
+                        decoration: const InputDecoration(labelText: 'LAST NAME'),
+                        validator: (v) => v!.isEmpty ? 'REQUIRED' : null,
                       ),
                     ),
                   ],
@@ -103,41 +134,38 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 const SizedBox(height: 16),
                 TextFormField(
                   controller: _emailController,
-                  decoration: const InputDecoration(
-                    labelText: 'Email',
-                    border: OutlineInputBorder(),
-                  ),
+                  decoration: const InputDecoration(labelText: 'EMAIL ADDRESS'),
                   keyboardType: TextInputType.emailAddress,
-                  validator: (v) =>
-                      !v!.contains('@') ? 'Enter valid email' : null,
+                  validator: (v) => !v!.contains('@') ? 'INVALID EMAIL' : null,
                 ),
                 const SizedBox(height: 16),
                 TextFormField(
                   controller: _usernameController,
-                  decoration: const InputDecoration(
-                    labelText: 'Username',
-                    border: OutlineInputBorder(),
-                  ),
-                  validator: (v) => v!.isEmpty ? 'Required' : null,
+                  decoration: const InputDecoration(labelText: 'USERNAME'),
+                  validator: (v) => v!.isEmpty ? 'REQUIRED' : null,
                 ),
                 const SizedBox(height: 16),
                 TextFormField(
                   controller: _passwordController,
-                  decoration: const InputDecoration(
-                    labelText: 'Password',
-                    border: OutlineInputBorder(),
-                  ),
+                  decoration: const InputDecoration(labelText: 'PASSWORD'),
                   obscureText: true,
-                  validator: (v) => v!.length < 6 ? 'Min 6 characters' : null,
+                  validator: (v) => v!.length < 6 ? 'MIN 6 CHARACTERS' : null,
                 ),
-                const SizedBox(height: 32),
+                const SizedBox(height: 40),
                 SizedBox(
-                  height: 50,
+                  height: 56,
                   child: ElevatedButton(
                     onPressed: _isLoading ? null : _register,
                     child: _isLoading
-                        ? const CircularProgressIndicator(color: Colors.white)
-                        : const Text('Sign Up', style: TextStyle(fontSize: 16)),
+                        ? const SizedBox(
+                            height: 24,
+                            width: 24,
+                            child: CircularProgressIndicator(
+                              strokeWidth: 2,
+                              color: Colors.white,
+                            ),
+                          )
+                        : const Text('CREATE IDENTITY'),
                   ),
                 ),
               ],

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import '../services/auth_service.dart';
-import 'home_screen.dart';
+import 'main_dashboard.dart';
 import 'register_screen.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -44,7 +45,7 @@ class _LoginScreenState extends State<LoginScreen> {
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(
-              builder: (context) => HomeScreen(user: response.user!),
+              builder: (context) => MainDashboard(user: response.user!),
             ),
           );
         }
@@ -52,9 +53,13 @@ class _LoginScreenState extends State<LoginScreen> {
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text(response.message),
-              backgroundColor: Colors.red,
-              duration: const Duration(seconds: 3),
+              content: Text(
+                response.message.toUpperCase(),
+                style: GoogleFonts.roboto(fontWeight: FontWeight.bold),
+              ),
+              backgroundColor: Colors.black,
+              behavior: SnackBarBehavior.floating,
+              shape: const RoundedRectangleBorder(borderRadius: BorderRadius.zero),
             ),
           );
         }
@@ -65,11 +70,17 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Login'), centerTitle: true),
+      appBar: AppBar(
+        title: const Text('IDENTIFICATION'),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios_new),
+          onPressed: () => Navigator.pop(context),
+        ),
+      ),
       body: SafeArea(
         child: Center(
           child: SingleChildScrollView(
-            padding: const EdgeInsets.all(24.0),
+            padding: const EdgeInsets.all(32.0),
             child: Form(
               key: _formKey,
               child: Column(
@@ -77,93 +88,118 @@ class _LoginScreenState extends State<LoginScreen> {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   const Icon(
-                    Icons.lock_outline,
+                    Icons.fingerprint,
                     size: 80,
-                    color: Colors.deepPurple,
+                    color: Colors.black,
                   ),
-                  const SizedBox(height: 48),
-                  const Text(
-                    'Welcome Back',
-                    style: TextStyle(fontSize: 24),
+                  const SizedBox(height: 32),
+                  Text(
+                    'AUTHENTICATE',
+                    style: GoogleFonts.roboto(
+                      fontSize: 32,
+                      fontWeight: FontWeight.w900,
+                      letterSpacing: 2.0,
+                    ),
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    'Sign in to continue',
-                    style: TextStyle(fontSize: 14, color: Colors.grey[600]),
+                    'PROVIDE CREDENTIALS TO CONTINUE',
+                    style: GoogleFonts.roboto(
+                      fontSize: 12,
+                      fontWeight: FontWeight.bold,
+                      letterSpacing: 1.5,
+                      color: Colors.grey[600],
+                    ),
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: 48),
                   TextFormField(
                     controller: _usernameController,
                     decoration: const InputDecoration(
-                      labelText: 'Username',
-                      hintText: 'Enter your username',
+                      labelText: 'USERNAME',
                       prefixIcon: Icon(Icons.person_outline),
-                      border: OutlineInputBorder(),
                     ),
                     textInputAction: TextInputAction.next,
                     validator: (value) {
                       if (value == null || value.trim().isEmpty) {
-                        return 'Please enter your username';
+                        return 'REQUIRED';
                       }
                       return null;
                     },
                     enabled: !_isLoading,
                   ),
-                  const SizedBox(height: 16),
+                  const SizedBox(height: 24),
                   TextFormField(
                     controller: _passwordController,
                     decoration: const InputDecoration(
-                      labelText: 'Password',
-                      hintText: 'Enter your password',
+                      labelText: 'PASSWORD',
                       prefixIcon: Icon(Icons.lock_outline),
-                      border: OutlineInputBorder(),
                     ),
                     obscureText: true,
                     textInputAction: TextInputAction.done,
                     onFieldSubmitted: (_) => _login(),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return 'Please enter your password';
+                        return 'REQUIRED';
                       }
                       if (value.length < 6) {
-                        return 'Password must be at least 6 characters';
+                        return 'MIN 6 CHARACTERS';
                       }
                       return null;
                     },
                     enabled: !_isLoading,
                   ),
-                  const SizedBox(height: 24),
+                  const SizedBox(height: 40),
                   SizedBox(
-                    height: 50,
+                    height: 56,
                     child: ElevatedButton(
                       onPressed: _isLoading ? null : _login,
                       child: _isLoading
                           ? const SizedBox(
-                              height: 20,
-                              width: 20,
+                              height: 24,
+                              width: 24,
                               child: CircularProgressIndicator(
                                 strokeWidth: 2,
                                 color: Colors.white,
                               ),
                             )
-                          : const Text('Login', style: TextStyle(fontSize: 16)),
+                          : const Text('VERIFY IDENTITY'),
                     ),
                   ),
-                  const SizedBox(height: 16),
+                  const SizedBox(height: 24),
                   Text(
-                    'Demo credentials:\nUsername: karn.yong\nPassword: melivecode',
-                    style: TextStyle(fontSize: 12, color: Colors.grey[600]),
+                    'DEMO: karn.yong / melivecode',
+                    style: GoogleFonts.roboto(
+                      fontSize: 10,
+                      fontWeight: FontWeight.bold,
+                      letterSpacing: 1.0,
+                      color: Colors.grey[600],
+                    ),
                     textAlign: TextAlign.center,
                   ),
-                  // เพิ่มโค้ดนี้ต่อท้ายใน Column ของ login_screen.dart
+                  const SizedBox(height: 32),
+                  const Divider(color: Colors.black, thickness: 2),
                   const SizedBox(height: 24),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const Text("Don't have an account? "),
+                      Text(
+                        "NO ACCESS? ",
+                        style: GoogleFonts.roboto(
+                          fontWeight: FontWeight.bold,
+                          letterSpacing: 1.0,
+                        ),
+                      ),
                       TextButton(
+                        style: TextButton.styleFrom(
+                          foregroundColor: Colors.black,
+                          textStyle: GoogleFonts.roboto(
+                            fontWeight: FontWeight.w900,
+                            letterSpacing: 1.0,
+                            decoration: TextDecoration.underline,
+                          ),
+                        ),
                         onPressed: () {
                           Navigator.push(
                             context,
@@ -172,7 +208,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             ),
                           );
                         },
-                        child: const Text('Register Here'),
+                        child: const Text('REQUEST ACCESS'),
                       ),
                     ],
                   ),

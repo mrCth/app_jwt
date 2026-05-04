@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import '../models/user.dart';
 import '../services/auth_service.dart';
 import 'login_screen.dart';
@@ -19,16 +20,37 @@ class _HomeScreenState extends State<HomeScreen> {
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Logout'),
-        content: const Text('Are you sure you want to logout?'),
+        shape: const RoundedRectangleBorder(borderRadius: BorderRadius.zero),
+        backgroundColor: Colors.white,
+        title: Text(
+          'TERMINATE SESSION',
+          style: GoogleFonts.roboto(fontWeight: FontWeight.w900),
+        ),
+        content: Text(
+          'ARE YOU SURE YOU WANT TO LOGOUT?',
+          style: GoogleFonts.roboto(fontWeight: FontWeight.bold),
+        ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
-            child: const Text('Cancel'),
+            child: Text(
+              'CANCEL',
+              style: GoogleFonts.roboto(
+                color: Colors.grey,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
           ),
-          TextButton(
+          ElevatedButton(
             onPressed: () => Navigator.pop(context, true),
-            child: const Text('Logout'),
+            style: ElevatedButton.styleFrom(backgroundColor: Colors.black),
+            child: Text(
+              'LOGOUT',
+              style: GoogleFonts.roboto(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
           ),
         ],
       ),
@@ -48,71 +70,82 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Home'),
-        centerTitle: true,
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.logout),
-            tooltip: 'Logout',
-            onPressed: _logout,
-          ),
-        ],
-      ),
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(24.0),
           child: Column(
             children: [
-              const SizedBox(height: 24),
-              ClipOval(
+              Align(
+                alignment: Alignment.centerRight,
+                child: IconButton(
+                  icon: const Icon(Icons.exit_to_app, color: Colors.black),
+                  tooltip: 'LOGOUT',
+                  onPressed: _logout,
+                ),
+              ),
+              const SizedBox(height: 8),
+              Container(
+                decoration: BoxDecoration(
+                  border: Border.all(color: Colors.black, width: 4),
+                ),
                 child: Image.network(
                   widget.user.avatar,
                   width: 120,
                   height: 120,
-                  fit: BoxFit.fill,
+                  fit: BoxFit.cover,
                   errorBuilder: (context, error, stackTrace) {
-                    return const Icon(Icons.account_circle, size: 120);
+                    return Container(
+                      width: 120,
+                      height: 120,
+                      color: Colors.grey[200],
+                      child: const Icon(Icons.person, size: 80, color: Colors.black),
+                    );
                   },
                 ),
               ),
               const SizedBox(height: 24),
               Text(
-                'Welcome, ${widget.user.fullName}!',
-                style: const TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
+                widget.user.fullName.toUpperCase(),
+                style: GoogleFonts.roboto(
+                  fontSize: 28,
+                  fontWeight: FontWeight.w900,
+                  letterSpacing: 1.5,
                 ),
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 8),
               Text(
-                'You are now logged in',
-                style: TextStyle(fontSize: 14, color: Colors.grey[600]),
+                'AUTHORIZED PERSONNEL',
+                style: GoogleFonts.roboto(
+                  fontSize: 12,
+                  fontWeight: FontWeight.bold,
+                  letterSpacing: 2.0,
+                  color: Colors.grey[600],
+                ),
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 48),
               _buildInfoCard(
-                icon: Icons.badge_outlined,
-                label: 'User ID',
+                icon: Icons.fingerprint,
+                label: 'IDENTIFIER',
                 value: widget.user.id.toString(),
               ),
               const SizedBox(height: 16),
               _buildInfoCard(
-                icon: Icons.person_outline,
-                label: 'Username',
+                icon: Icons.badge,
+                label: 'USERNAME',
                 value: widget.user.username,
               ),
               const SizedBox(height: 16),
               _buildInfoCard(
-                icon: Icons.email_outlined,
-                label: 'Email',
+                icon: Icons.alternate_email,
+                label: 'COMMUNICATION',
                 value: widget.user.email,
               ),
               const SizedBox(height: 16),
               _buildInfoCard(
-                icon: Icons.face_outlined,
-                label: 'Full Name',
+                icon: Icons.face,
+                label: 'DESIGNATION',
                 value: widget.user.fullName,
               ),
             ],
@@ -127,32 +160,49 @@ class _HomeScreenState extends State<HomeScreen> {
     required String label,
     required String value,
   }) {
-    return Card(
-      elevation: 2,
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Row(
-          children: [
-            Icon(icon, size: 24, color: Colors.deepPurple),
-            const SizedBox(width: 16),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    label,
-                    style: TextStyle(fontSize: 12, color: Colors.grey[600]),
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(20.0),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        border: Border.all(color: Colors.black, width: 2),
+        boxShadow: const [
+          BoxShadow(
+            color: Colors.black,
+            offset: Offset(4, 4), // Hard shadow for brutalist/art effect
+          ),
+        ],
+      ),
+      child: Row(
+        children: [
+          Icon(icon, size: 32, color: Colors.black),
+          const SizedBox(width: 20),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  label,
+                  style: GoogleFonts.roboto(
+                    fontSize: 10,
+                    fontWeight: FontWeight.bold,
+                    letterSpacing: 2.0,
+                    color: Colors.grey[600],
                   ),
-                  const SizedBox(height: 4),
-                  Text(
-                    value,
-                    style: const TextStyle(fontWeight: FontWeight.w500),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  value,
+                  style: GoogleFonts.roboto(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w900,
+                    color: Colors.black,
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
